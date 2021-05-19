@@ -16,6 +16,21 @@
           Delete movie
         </a>
       </div>
+
+
+      <% if Bookmark.where({ :user_id => @current_user.id, :movie_id =>@the_movie.id}).length == 0 %>
+        <div>
+          <form action="/insert_bookmark" method="post">
+            <input type="hidden" id="movie_id_box" name="query_movie_id" value="<%= @the_movie.id %>">
+            <input type="hidden" id="user_id_box" name="query_user_id" value="<%= @current_user.id %>">
+            <button>
+              Bookmark this movie!
+            </button>
+          </form>
+        </div>
+      <% else %>
+        <a href="/delete_bookmark/<%= Bookmark.where({ :user_id => @current_user.id, :movie_id =>@the_movie.id}).at(0).id %>">Un-bookmark</a>
+      <% end %>
     </div>
 
     <dl>

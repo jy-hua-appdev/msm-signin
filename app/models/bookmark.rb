@@ -8,5 +8,6 @@
 #  movie_id   :integer
 #  user_id    :integer
 #
-class Bookmark < ApplicationRecord
+class Bookmark < ApplicationRecord 
+    belongs_to :movies
 end

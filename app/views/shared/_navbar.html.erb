@@ -33,17 +33,31 @@
           </div>
         </li>
 
-        <li class="nav-item">
-          <a href="/user_sign_in" class="nav-link">
-            Sign in
-          </a>
-        </li>
+        <% if @current_user == nil %>
+          <li class="nav-item">
+            <a href="/user_sign_in" class="nav-link">
+              Sign in
+            </a>
+          </li>
 
-        <li class="nav-item">
-          <a href="/user_sign_up" class="nav-link">
-            Sign up
-          </a>
-        </li>
+          <li class="nav-item">
+            <a href="/user_sign_up" class="nav-link">
+              Sign up
+            </a>
+          </li>
+        <% else %>
+          <li class="nav-item">
+            <a href="/edit_user_profile" class="nav-link">
+              Edit <%= @current_user.first_name %>
+            </a>
+          </li>
+
+          <li class="nav-item">
+            <a href="/user_sign_out" class="nav-link">
+              Sign out
+            </a>
+          </li>
+        <% end %>
       </ul>
     </div> <!-- .navbar-collapse -->
   </div> <!-- .container -->

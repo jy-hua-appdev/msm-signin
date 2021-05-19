@@ -1,7 +1,7 @@
 <div>
   <div>
     <h1>
-      List of all bookmarks
+      <%= @current_user.first_name %> <%= @current_user.last_name %>'s bookmarks
     </h1>
   </div>
 </div>
@@ -15,24 +15,16 @@
     </h2>
 
     <form action="/insert_bookmark" method="post">
-      <div>
-        <label for="user_id_box">
-          User
-        </label>
-
-        <input type="text" id="user_id_box" name="query_user_id">
-      </div>
-
-      <div>
-        <label for="movie_id_box">
-          Movie
-        </label>
-
-        <input type="text" id="movie_id_box" name="query_movie_id">
-      </div>
+      <select name="query_movie_id" id="movie_id_box">
+        <% Movie.all.order({ :created_at => :desc }).each do |a_movie| %>
+          <option value="<%= a_movie.id %>"><%= a_movie.title %></option>
+        <% end %>
+      </select>
+      
+      <input type="hidden" id="user_id_box" name="query_user_id" value="<%= @current_user.id %>">
 
       <button>
-        Create bookmark
+        Bookmark this movie!
       </button>
     </form>
   </div>
@@ -41,16 +33,8 @@
 <hr>
 <div>
   <div>
-    <table>
+    <table border="1px">
       <tr>
-        <th>
-          ID
-        </th>
-
-        <th>
-          User
-        </th>
-
         <th>
           Movie
         </th>
@@ -60,40 +44,27 @@
         </th>
 
         <th>
-          Updated at
+          
         </th>
 
-        <th>
-        </th>
       </tr>
 
       <% @list_of_bookmarks.each do |a_bookmark| %>
-      <tr>
-        <td>
-          <%= a_bookmark.id %>
-        </td>
+        <% if a_bookmark.user_id == @current_user.id %>
+          <tr>
+            <td>
+              <%= Movie.where({ :id => a_bookmark.movie_id }).at(0).title %>
+            </td>
 
-        <td>
-          <%= a_bookmark.user_id %>
-        </td>
+            <td>
+              <%= time_ago_in_words(a_bookmark.created_at) %> ago
+            </td>
 
-        <td>
-          <%= a_bookmark.movie_id %>
-        </td>
-
-        <td>
-          <%= time_ago_in_words(a_bookmark.created_at) %> ago
-        </td>
-        <td>
-          <%= time_ago_in_words(a_bookmark.updated_at) %> ago
-        </td>
-
-        <td>
-          <a href="/bookmarks/<%= a_bookmark.id %>">
-            Show details
-          </a>
-        </td>
-      </tr>
+            <td>
+              <a href="/delete_bookmark/<%= a_bookmark.id %>">Un-bookmark</a>
+            </td>
+          </tr>
+        <% end %>
       <% end %>
     </table>
   </div>
